@@ -5,6 +5,7 @@ const rateLimit = require('express-rate-limit');
 const tourRouter = require('./routes/tourRoutes');
 const userRouter = require('./routes/userRoutes');
 const reviewRouter = require('./routes/reviewRoutes');
+const viewRouter = require('./routes/viewRoutes');
 const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controllers/errorController');
 const helmet = require('helmet');
@@ -76,14 +77,7 @@ app.use((req, res, next) => {
 });
 
 // 3) ROUTES
-
-app.get('/', (req, res) => {
-  res.status(200).render('base', {
-    tour: 'The Forest Hiker',
-    user: 'Jonas',
-  });
-});
-
+app.use('/', viewRouter);
 app.use('/api/v1/tours', tourRouter); //middleware--development ko easier kar dete ha and fast bi
 app.use('/api/v1/users', userRouter); //middleware
 app.use('/api/v1/reviews', reviewRouter);
