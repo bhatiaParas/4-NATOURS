@@ -12,6 +12,7 @@ const helmet = require('helmet');
 const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const hpp = require('hpp');
+const cookieParser = require('cookie-parser');
 
 const app = express();
 
@@ -47,7 +48,8 @@ app.use('/api', limiter);
 
 // Body parser, reading data from body into req.body
 
-app.use(express.json({ limit: '10kb' })); //middleware
+app.use(express.json({ limit: '10kb' })); //middleware // Parses the data from body
+app.use(cookieParser()); // Parses the data from cookie
 
 // Data Sanitization against NOSQL query injection
 app.use(mongoSanitize()); // email- {"$gt": ""} or password pata ho to hmara login ho jata tha par ab ye mongosanitize $ sign ko hata deta ha ab login nhi ho payega
@@ -73,10 +75,27 @@ app.use(
 
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
+  console.log(req.cookies);
   next();
 });
 
 // 3) ROUTES
+app.use((req, res, next) => {
+  res.setHeader(
+    'Content-Security-Policy',
+    "default-src 'self'; script-src 'self' https://cdnjs.cloudflare.com; script-src-elem 'self' https://cdnjs.cloudflare.com; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self'; connect-src 'self' https://cdnjs.cloudflare.com",
+  );
+  next();
+});
+
+app.use((req, res, next) => {
+  res.setHeader(
+    'Content-Security-Policy',
+    "connect-src 'self' https://cdnjs.cloudflare.com ws://127.0.0.1:56294",
+  );
+  next();
+});
+
 app.use('/', viewRouter);
 app.use('/api/v1/tours', tourRouter); //middleware--development ko easier kar dete ha and fast bi
 app.use('/api/v1/users', userRouter); //middleware

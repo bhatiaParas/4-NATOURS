@@ -87,6 +87,8 @@ exports.protect = catchAsync(async (req, res, next) => {
     token = req.headers.authorization.split(' ')[1];
     //.split(' ') splits the string into an array of substrings using a space character as the delimiter. For example, 'Bearer abc123' becomes ['Bearer', 'abc123'].
     //[1] accesses the second element of the array (index 1), which is the actual token ('abc123' in the example).
+  } else if (req.cookies.jwt) {
+    token = req.cookies.jwt;
   }
   //   console.log(token);
 
@@ -124,6 +126,34 @@ exports.protect = catchAsync(async (req, res, next) => {
 
   // GRANT ACCESS TO PROTECTED ROUTE
   req.user = currentUser;
+  next();
+});
+
+// Only for rendered pages, no errors
+exports.isLoggedIn = catchAsync(async (req, res, next) => {
+  if (req.cookies.jwt) {
+    //1) Verifies the token
+    const decoded = await promisify(jwt.verify)(
+      req.cookies.jwt,
+      process.env.JWT_SECRET,
+    );
+    // console.log(decoded);
+
+    // 3) Check if user still exists
+    const currentUser = await User.findById(decoded.id);
+    if (!currentUser) {
+      return next();
+    }
+
+    // 4) Check if user changed password after the token was issued
+    if (currentUser.changedPasswordAfter(decoded.iat)) {
+      return next();
+    }
+
+    // There is a Logged iN user
+    res.locals.user = currentUser;
+    return next();
+  }
   next();
 });
 
