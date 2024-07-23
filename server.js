@@ -31,23 +31,8 @@ mongoose
 
 // Schema
 
-//In the next video we gonna then use model here in order to create very first tour document
-//lec-86
-//This is just for testing we dont really need this
-// const testTour = new Tour({
-//   name: 'The Park Camper',
-//   price: 997,
-// });
 
-// testTour
-//   .save()
-//   .then((doc) => {
-//     //this will save the document in the data base..this save will then return a promise
-//     console.log(doc);
-//   })
-//   .catch((err) => {
-//     console.log('ERROR', err);
-//   });
+
 
 const port = process.env.PORT || 3000;
 const server = app.listen(port, () => {
