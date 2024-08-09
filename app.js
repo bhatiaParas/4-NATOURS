@@ -80,18 +80,26 @@ app.use((req, res, next) => {
 });
 
 // 3) ROUTES
-app.use((req, res, next) => {
-  res.setHeader(
-    'Content-Security-Policy',
-    "default-src 'self'; script-src 'self' https://cdnjs.cloudflare.com; script-src-elem 'self' https://cdnjs.cloudflare.com; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self'; connect-src 'self' https://cdnjs.cloudflare.com",
-  );
-  next();
-});
+// app.use((req, res, next) => {
+//   res.setHeader(
+//     'Content-Security-Policy',
+//     "default-src 'self'; script-src 'self' https://cdnjs.cloudflare.com; script-src-elem 'self' https://cdnjs.cloudflare.com; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self'; connect-src 'self' https://cdnjs.cloudflare.com",
+//   );
+//   next();
+// });
+
+// app.use((req, res, next) => {
+//   res.setHeader(
+//     'Content-Security-Policy',
+//     "connect-src 'self' https://cdnjs.cloudflare.com ws://127.0.0.1:56294",
+//   );
+//   next();
+// });
 
 app.use((req, res, next) => {
   res.setHeader(
     'Content-Security-Policy',
-    "connect-src 'self' https://cdnjs.cloudflare.com ws://127.0.0.1:56294",
+    "default-src 'self'; connect-src 'self' ws://127.0.0.1:64588",
   );
   next();
 });

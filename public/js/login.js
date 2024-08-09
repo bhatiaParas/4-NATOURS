@@ -1,7 +1,7 @@
 /* eslint-disable */
-// import axios from 'axios';
+import axios from 'axios';
 
-const login = async (email, password) => {
+export const login = async (email, password) => {
   try {
     const res = await axios({
       method: 'POST',

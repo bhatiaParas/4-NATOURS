@@ -1,6 +1,10 @@
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 
+// import mongoose from 'mongoose';
+// import dotenv from 'dotenv';
+// import {app} from './app.js';
+
 process.on('uncaughtException', (err) => {
   console.log('UuncaughtException, SHUTTING DOWN');
   console.log(err.name, err.message);
@@ -18,9 +22,11 @@ const DB = process.env.DATABASE.replace(
 
 mongoose
   .connect(DB, {
-    useNewUrlParser: true,
+    // useNewUrlParser: true,
     useCreateIndex: true,
-    useFindAndModify: false,
+    // useFindAndModify: false,
+    // useUnifiedTopology: true,
+    useNewUrlParser: true,
     useUnifiedTopology: true,
   })
   .then(() => {
